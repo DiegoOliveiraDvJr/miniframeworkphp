@@ -14,11 +14,26 @@ class Route extends Bootstrap {
 			'action' => 'index'
 		);
 
-		$routes['sobre_nos'] = array(
-			'route' => '/sobre_nos',
-			'controller' => 'indexController',
-			'action' => 'sobreNos'
+		$routes['blog'] = array(
+			'route' => '/blog',
+			'controller' => 'BlogController',
+			'action' => 'index'
 		);
+
+		$routes['cadastrar_post'] = array(
+			'route' => '/blog/cadastrar-post',
+			'controller' => 'BlogController',
+			'action' => 'cadastrarPostView'
+		);
+
+		
+		$routes["api_post_create"] = array(
+			'route' => '/api/post/create',
+			'controller' => 'PostController',
+			'action' => 'create',
+			'method' => 'POST'
+		);
+
 
 		$this->setRoutes($routes);
 	}

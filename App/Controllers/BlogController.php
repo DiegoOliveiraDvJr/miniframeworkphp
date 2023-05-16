@@ -12,12 +12,23 @@ use App\Models\Produto;
 use App\Models\Info;
 
 
-class IndexController extends Action {
+class BlogController extends Action {
 
 	public function index() {
+
+		$ModelPost = Container::getModel('Post');
+
+		$posts = $ModelPost->getPosts();
+
+		@$this->view->dados = $posts;
+
 		$this->render('index', 'mainLayout');
 	}
-}
 
+	public function cadastrarPostView() {
+		$this->render('cadastro-post', 'mainLayout');
+	}
+	
+}
 
 ?>

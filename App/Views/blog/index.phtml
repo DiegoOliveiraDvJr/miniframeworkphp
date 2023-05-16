@@ -1,0 +1,52 @@
+<div>
+    <div class="w-full flex justify-between items-center gap-4">
+   
+        <h1 class="font-medium text-2xl 2xl:text-4xl text-gray-700">Blog</h1>
+        <a href="./blog/cadastrar-post" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Cadastrar
+        </a>
+    </div>
+    <?php if(isset($_GET['create'])) { ?>
+        <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mt-10 relative" role="alert">
+            <div class="flex">
+                <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
+                <div>
+                    <p class="font-bold">Post criado com sucesso</p>
+                </div>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" @click="$event => $event.target.parentNode.remove()" fill="currentColor" class="w-6 h-6 absolute top-3 right-3 cursor-pointer" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </div>
+    <?php } ?>
+
+    <div class="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3 xl:gap-10">
+        <?php
+            foreach ($this->view->dados as $post) {    
+        ?>
+            <div class="w-full rounded overflow-hidden shadow-lg relative">
+                <span class="absolute top-2 right-0 bg-blue-500 px-4 text-white"><?php echo $post->category_name; ?></span>
+                <img class="w-full" src="https://v1.tailwindcss.com//img/card-top.jpg" alt="Sunset in the mountains">
+                <div class="px-6 py-4">
+                    <h2 class="font-bold text-xl mb-2"><?php echo $post->title; ?></h2>
+                    <p class="text-gray-700 text-sm">
+                        <?php echo substr(strip_tags($post->content), 0, 100); ?>[...]
+                    </p>
+                </div>
+                <?php
+                    $tags = $post->tag_names ? explode(",", $post->tag_names) : [];
+                    if(count($tags) > 0){
+                ?>
+                    <div class="px-6 pt-4 pb-2">
+                    <?php
+                        foreach ($tags as $tag) {    
+                    ?>
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#<?php echo $tag; ?></span>
+                    <?php } ?>
+                    </div>
+                <?php } ?>
+                
+            </div>
+        <?php } ?>
+    </div>
+</div>

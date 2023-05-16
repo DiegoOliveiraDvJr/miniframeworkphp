@@ -1,0 +1,137 @@
+<div x-data="post()">
+    <div class="space-y-4">
+        <div>
+            <label for="post-titulo" class="mb-2 block text-lg 2xl:text-xl">Título:</label>
+            <input id="post-titulo" x-model="post.titulo" type="text" class="appearance-none text-gray-800 ring-2 ring-gray-900 w-full text-2xl py-1 px-4 lg:text-3xl bg-transparent placeholder:text-gray-400 placeholder:text-sm" maxlength="245" placeholder="Informe aqui...">
+        </div>
+        <div>
+            <label for="post-conteudo" class="-2 block text-lg 2xl:text-xl">Conteúdo:</label>
+            <div id="editor">
+            </div>
+        </div>
+        <button @click="save" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Cadastrar
+        </button>
+    </div>
+
+    <script defer>
+        var content = null;
+
+        function post() {
+            return {
+                post: {
+                    titulo: null,
+                    conteudo: null
+                },
+                save() {
+                    this.post.conteudo = content;
+                    let url = "/api/post/create"
+                    const formData = new FormData();
+                    formData.append('title', this.post.titulo);
+                    formData.append('content', this.post.conteudo);
+                    console.log(post)
+
+                    fetch(url, {
+                            body: formData,
+                            method: "POST"
+                        })
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(data) {
+
+                            if (data?.sucess) {
+                                if (data.redirect != null) {
+                                    window.location.href = '/' + (data.redirect);
+                                }
+                            }
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
+                },
+                getFormData(object) {
+                    const formData = new FormData();
+                    Object.keys(object).forEach(key => formData.append(key, object[key]));
+                    return formData;
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", (event) => {
+
+
+            var toolbarOptions = [
+                ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+                [{
+                    'header': 1
+                }], // custom button values
+                [{
+                    'list': 'ordered'
+                }, {
+                    'list': 'bullet'
+                }],
+                [{
+                    'indent': '-1'
+                }, {
+                    'indent': '+1'
+                }], // outdent/indent
+                [{
+                    'direction': 'rtl'
+                }], // text direction
+                ['link', 'image', 'video'],
+                [{
+                    'header': [1, 2, 3, 4, 5, false]
+                }],
+                [{
+                    'color': [
+                        "#232323", "#df110f", "#393939",
+                        "#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc", "#9933ff",
+                        "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc", "#cce0f5", "#ebd6ff",
+                        "#bbbbbb", "#f06666", "#ffc266", "#ffff66", "#66b966", "#66a3e0", "#c285ff",
+                        "#888888", "#a10000", "#b26b00", "#b2b200", "#006100", "#0047b2", "#6b24b2",
+                        "#444444", "#5c0000", "#663d00", "#666600", "#003700", "#002966", "#3d1466"
+                    ]
+                }, {
+                    'background': []
+                }], // dropdown with defaults from theme
+                [{
+                    'font': ['bambinoLight', 'bambinoRegular', 'bambinoBold']
+                }],
+                [{
+                    'align': []
+                }],
+                [{
+                    'script': 'sub'
+                }, {
+                    'script': 'super'
+                }], // superscript/subscript
+                ['formula', 'blockquote', 'code-block'],
+
+                ['clean'] // remove formatting button
+            ];
+
+            var quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: toolbarOptions,
+
+                },
+                theme: 'snow'
+            });
+
+            quill.on('text-change', function(delta, oldDelta, source) {
+                if (source == 'user') {
+                    content = quill.root.innerHTML;
+                }
+            });
+
+            document.querySelectorAll(".ql-picker").forEach(tool => {
+                tool.addEventListener("mousedown", function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                });
+            });
+        });
+    </script>
+</div>

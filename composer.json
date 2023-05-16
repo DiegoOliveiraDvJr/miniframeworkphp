@@ -1,7 +1,7 @@
 {
 	"name": "miniframework",
 	"require": {
-		"php": ">= 7.0"
+		"php": ">= 5.0"
 	},
 	"authors": [
 		{
